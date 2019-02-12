@@ -48,7 +48,8 @@ a list of
 }
 \references{
   %% ~put references to the literature/web site here ~
-  Y. Wang and P. J. Bickel. Likelihood-based model selection for stochastic block models. arXiv preprint arXiv:1502.02069, 2015.
+  Wang, Y. R. & Bickel, P. J. Likelihood-based model selection for stochastic block models The Annals of Statistics, Institute of Mathematical Statistics, 2017, 45, 500-528
+
 }
 \author{
   %%  ~~who you are~~

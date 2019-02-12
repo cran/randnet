@@ -20,9 +20,7 @@ BlockModel.Gen <- function(lambda,n,beta=0,K=3,w=rep(1,K),Pi=rep(1,K)/K,rho=0,si
 
     M <- matrix(0,n,K)
     membership <- sample(x=K,size=n,replace=TRUE,prob=Pi)
-    for(i in 1:n){
-        M[i,membership[i]] <- 1
-    }
+    M[cbind(1:n,membership)] <- 1
     A.bar <- M%*%P%*%t(M)
     node.degree <- rep(1,n)
     if(rho>0){
@@ -205,7 +203,7 @@ LRBIC <- function(A,Kmax,lambda=NULL,model="both"){
     }
         ## DCSBM
         if(try.model=="both"){
-            model=="DCSBM"
+            model <- "DCSBM"
         }
         if(model=="DCSBM"){
         DCSBM.clust <- reg.SSP(A,K=K,tau=0.25,lap=TRUE)
@@ -1148,5 +1146,47 @@ holdout.evaluation.graphon.lowrank <- function(holdout.index,A,h.seq,p.sample=1,
 
 
     return(err.seq)
+}
+
+
+
+
+ConsensusClust <- function(A,K,tau=0.25,lap=TRUE){
+  
+  n <- nrow(A)
+  sigma.list <- list()
+  for(u in 1:n){
+    Au <- A[-u,-u]
+    sc <- reg.SP(A=Au,K=K,tau=tau,lap=lap)
+    sigma.u <- sc$cluster
+    est.u <- SBM.estimate(A=Au,g=sigma.u)
+    a.u <- n*min(diag(est.u$B)+0.1/n)
+    fake.B.u <- est.u$B
+    diag(fake.B.u) <- -1
+    b.u <- n*max(fake.B.u)
+    t.u <- 0.5*log(a.u*(1-b.u/n))-0.5*log(b.u*(1-a.u/n))
+    rho.u <- -0.5*(1/t.u)*(log(a.u/n*exp(-t.u)+1-a.u/n)-log(b.u/n*exp(t.u)+1-b.u/n))
+    Z.u <- matrix(0,nrow=n-1,ncol=K)
+    Z.u[cbind(1:(n-1),sigma.u)] <- 1
+    u.comm <- matrix(A[u,-u],nrow=1)%*%Z.u
+    u.size <- colSums(Z.u)
+    score <- u.comm - rho.u*u.size
+    tmp.sigma <- rep(0,n)
+    tmp.sigma[-u] <- sigma.u
+    tmp.sigma[u] <- which.max(score)
+    sigma.list[[u]] <- tmp.sigma
+  }
+  ## consensus step
+  sigma <- rep(0,n)
+  sigma[1] <- sigma.list[[1]][1]
+  base.sigma <- sigma.list[[1]]
+  for(u in 2:n){
+    K.score <- rep(0,K)
+    for(k in 1:K){
+      K.score[k] <- length(intersect(which(base.sigma==k),which(sigma.list[[u]]==sigma.list[[u]][u])))
+    }
+    sigma[u] <- which.max(K.score)
+  }
+  return(sigma)
 }
 

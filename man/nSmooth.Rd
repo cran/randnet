@@ -33,7 +33,9 @@ the probability matrix
 }
 \references{
   %% ~put references to the literature/web site here ~
-  Y. Zhang, E. Levina, and J. Zhu. Estimating network edge probabilities by neighborhood smoothing. Biometrika (In press), 2017+.
+
+  Zhang, Y.; Levina, E. & Zhu, J. Estimating network edge probabilities by neighbourhood smoothing Biometrika, Oxford University Press, 2017, 104, 771-783
+
 }
 \author{
   %%  ~~who you are~~

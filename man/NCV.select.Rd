@@ -41,8 +41,8 @@ a list of
 }
 \references{
   %% ~put references to the literature/web site here ~
-  K. Chen and J. Lei. Network cross-validation for determining the number of communities
-in network data. Journal of the American Statistical Association, (accepted), 2016.
+Chen, K. & Lei, J. Network cross-validation for determining the number of communities in network data Journal of the American Statistical Association, Taylor & Francis, 2018, 113, 241-251
+
 }
 \author{
   %%  ~~who you are~~
