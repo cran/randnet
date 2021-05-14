@@ -3,7 +3,7 @@
 \alias{randnet}
 \docType{package}
 \title{
-Statistical modeling of random networks with model selection and
+Statistical modeling of random networks with model estimation, selection and
 parameter tuning
 }
 \description{
@@ -16,20 +16,20 @@ called ECV. Several other model selection methods are also included.
 \tabular{ll}{
 Package: \tab randnet\cr
 Type: \tab Package\cr
-Version: \tab 0.2\cr
-Date: \tab 2019-02-10\cr
+Version: \tab 0.3\cr
+Date: \tab 2021-05-04\cr
 License: \tab GPL (>= 2)\cr
 }
 }
 \author{
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
 
-Maintainer: Tianxi Li <tianxili@umich.edu>
+Maintainer: Tianxi Li <tianxili@virginia.edu>
 
 }
 \references{
   T. Li, E. Levina, and J. Zhu. Network cross-validation by edge
-  sampling. arXiv preprint arXiv:1612.04717, 2016.
+  sampling. Biometrika, 107(2), pp.257-276, 2020.
 
   K. Chen and J. Lei. Network cross-validation for determining the number
   of communities in network data. Journal of the American Statistical
@@ -69,6 +69,9 @@ methods. arXiv preprint arXiv:1507.00827, 2015.
   Mathematical Statistics, 2017, 45, 500-528
 
   Gao, C.; Ma, Z.; Zhang, A. Y. & Zhou, H. H. Achieving optimal misclassification proportion in stochastic block models The Journal of Machine Learning Research, JMLR. org, 2017, 18, 1980-2024
+  
+    T. Li, E. Levina, and J. Zhu. Community models for networks observed through edge nominations. arXiv preprint arXiv:2008.03652 (2020).
+
 
 }
 \keyword{ package }

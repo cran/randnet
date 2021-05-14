@@ -30,7 +30,7 @@ NMI value
 \author{
   %%  ~~who you are~~
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
-  Maintainer: Tianxi Li  \email{tianxili@umich.edu}
+  Maintainer: Tianxi Li  \email{tianxili@virginia.edu}
 }
 
 \examples{

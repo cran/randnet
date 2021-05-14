@@ -42,12 +42,12 @@ a list of
   %% ~put references to the literature/web site here ~
   S. J. Young and E. R. Scheinerman. Random dot product graph models for
   social networks. In International Workshop on Algorithms and Models for the Web-Graph, pages 138-149. Springer, 2007.
-  T. Li, E. Levina, and J. Zhu. Network cross-validation by edge sampling. arXiv preprint arXiv:1612.04717, 2016.
+  T. Li, E. Levina, and J. Zhu. Network cross-validation by edge sampling. Biometrika, 107(2), pp.257-276, 2020.
 }
 \author{
   %%  ~~who you are~~
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
-  Maintainer: Tianxi Li  \email{tianxili@umich.edu}
+  Maintainer: Tianxi Li  \email{tianxili@virginia.edu}
 }
 
 \examples{

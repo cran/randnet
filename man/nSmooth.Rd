@@ -41,7 +41,7 @@ the probability matrix
   %%  ~~who you are~~
     Tianxi Li, Elizaveta Levina, Ji Zhu\cr
 
-Maintainer: Tianxi Li <tianxili@umich.edu>
+Maintainer: Tianxi Li <tianxili@virginia.edu>
 }
 
 \examples{

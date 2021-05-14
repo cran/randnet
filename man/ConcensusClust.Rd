@@ -49,7 +49,7 @@ Gao, C.; Ma, Z.; Zhang, A. Y. & Zhou, H. H. Achieving optimal misclassification 
   %%  ~~who you are~~
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
 
-Maintainer: Tianxi Li <tianxili@umich.edu>
+Maintainer: Tianxi Li <tianxili@virginia.edu>
 }
 
 \seealso{

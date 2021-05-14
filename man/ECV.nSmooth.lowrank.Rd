@@ -47,13 +47,13 @@ a list object with
 }
 \references{
   %% ~put references to the literature/web site here ~
-  T. Li, E. Levina, and J. Zhu. Network cross-validation by edge sampling. arXiv preprint arXiv:1612.04717, 2016.
+  T. Li, E. Levina, and J. Zhu. Network cross-validation by edge sampling. Biometrika, 107(2), pp.257-276, 2020.
 
 }
 \author{
   %%  ~~who you are~~
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
-  Maintainer: Tianxi Li  \email{tianxili@umich.edu}
+  Maintainer: Tianxi Li  \email{tianxili@virginia.edu}
 }
 
 \examples{

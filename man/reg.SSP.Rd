@@ -9,7 +9,7 @@ detects communities by regularized spherical spectral clustering
   community detection by regularized spherical spectral clustering
 }
 \usage{
-reg.SSP(A, K, tau = 1, lap = FALSE)
+reg.SSP(A, K, tau = 1, lap = FALSE,nstart=30,iter.max=100)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -26,6 +26,12 @@ and 1. If tau=0, no regularization is applied.
   \item{lap}{
  indicator. If TRUE, the  Laplacian matrix for clustering. If FALSE, the
  adjacency matrix will be used.
+}
+  \item{nstart}{
+ number of random initializations for K-means
+}
+  \item{iter.max}{
+ maximum number of iterations for K-means
 }
 }
 
@@ -60,7 +66,7 @@ Annals of Statistics, 43(1):215-237, 2014.
   %%  ~~who you are~~
     Tianxi Li, Elizaveta Levina, Ji Zhu\cr
 
-Maintainer: Tianxi Li <tianxili@umich.edu>
+Maintainer: Tianxi Li <tianxili@virginia.edu>
 }
 
 \seealso{

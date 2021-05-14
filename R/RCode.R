@@ -14,9 +14,7 @@ BlockModel.Gen <- function(lambda,n,beta=0,K=3,w=rep(1,K),Pi=rep(1,K)/K,rho=0,si
         diag(P0) <- w/beta
     }
     Pi.vec <- matrix(Pi,ncol=1)
-    P <- lambda*P0/((n-1)*as.numeric(t(Pi.vec)%*%P0%*%Pi.vec)*(rho*0.2+(1-rho))^2)
-    if((rho >0) && (!simple) && (!power)){ P <- lambda*P0/((n-1)*as.numeric(t(Pi.vec)%*%P0%*%Pi.vec)*(0.6)^2)   }
-    if((rho >0) && (!simple) && (power)){ P <- lambda*P0/((n-1)*as.numeric(t(Pi.vec)%*%P0%*%Pi.vec)*((1.285)^2))   }
+    P <- P0
 
     M <- matrix(0,n,K)
     membership <- sample(x=K,size=n,replace=TRUE,prob=Pi)
@@ -37,8 +35,7 @@ BlockModel.Gen <- function(lambda,n,beta=0,K=3,w=rep(1,K),Pi=rep(1,K)/K,rho=0,si
             node.degree <- sample(degree.seed,size=n,replace=TRUE)
         }
     }}
-    DD <- diag(node.degree)
-    A.bar <- DD%*%A.bar%*%DD
+    A.bar <- t(t(A.bar*node.degree)*node.degree)
     A.bar <- A.bar*lambda/mean(colSums(A.bar))
     #diag(A.bar) <- 0
     #avg.d <- mean(colSums(A.bar))
@@ -57,7 +54,7 @@ BlockModel.Gen <- function(lambda,n,beta=0,K=3,w=rep(1,K),Pi=rep(1,K)/K,rho=0,si
 
 
 
-reg.SP <- function(A,K,tau=1,lap=FALSE){
+reg.SP <- function(A,K,tau=1,lap=FALSE,nstart=30,iter.max=100){
     avg.d <- mean(colSums(A))
     A.tau <- A + tau*avg.d/nrow(A)
     if(!lap){SVD <- irlba(A.tau,nu=K,nv=K)}else{
@@ -66,12 +63,12 @@ reg.SP <- function(A,K,tau=1,lap=FALSE){
          #SVD <- svd(L.tau,nu=K,nv=K)
          SVD <- irlba(L.tau,nu=K,nv=K)
     }
-    km <- kmeans(SVD$v[,1:K],centers=K,nstart=30,iter.max=30)#,algorithm="Lloyd")
+    km <- kmeans(SVD$v[,1:K],centers=K,nstart=nstart,iter.max=iter.max)#,algorithm="Lloyd")
     return(list(cluster=km$cluster,loss=km$tot.withinss))
 }
 
 
-reg.SSP <- function(A,K,tau=1,lap=FALSE){
+reg.SSP <- function(A,K,tau=1,lap=FALSE,nstart=30,iter.max=100){
     avg.d <- mean(colSums(A))
     A.tau <- A + tau*avg.d/nrow(A)
     if(!lap){SVD <- irlba(A.tau,nu=K,nv=K)
@@ -87,7 +84,7 @@ reg.SSP <- function(A,K,tau=1,lap=FALSE){
          V.norm <- apply(V,1,function(x)sqrt(sum(x^2)))
          V.normalized <- diag(1/V.norm)%*%V
     }
-    km <- kmeans(V.normalized,centers=K,nstart=50,iter.max=50)#,algorithm="Lloyd")
+    km <- kmeans(V.normalized,centers=K,nstart=nstart,iter.max=iter.max)#,algorithm="Lloyd")
     return(list(cluster=km$cluster,loss=km$tot.withinss))
 }
 
@@ -103,7 +100,11 @@ SBM.estimate <- function(A,g){
                 B[j,i] <- B[i,j] <- mean(A[which(g==i),which(g==j)])
             }else{
                 n.i <- length(which(g==i))
-                B[i,i] <- sum(A[which(g==i),which(g==i)])/(n.i^2 - n.i)
+                if(n.i>1){
+                  B[i,i] <- sum(A[which(g==i),which(g==i)])/(n.i^2 - n.i)
+                }else{
+                  B[i,i] <- 0
+                }
             }
         }
     }
@@ -262,7 +263,7 @@ BHMC.estimate <- function(A,K.max=15){
     r <- sqrt(mean(d))#sqrt(sum(d^2)/sum(d)-1)
     BH <- (r^2-1)*I-r*A+D
     #rho <- partial_eigen(BH,15)$values#eigs_sym(BH,15,which="LM",sigma=0)$values
-    rho <- sort(eigs_sym(BH,15,which="SA")$values)
+    rho <- sort(eigs_sym(BH,K.max,which="SA")$values)
     diff <- rho[2:K.max]-5*rho[1:(K.max-1)]
     #if(rho[1]>5*rho[2]) return(TRUE)
     return(list(K=max(which(diff>0)),values=rho))
@@ -1189,4 +1190,126 @@ ConsensusClust <- function(A,K,tau=0.25,lap=TRUE){
   }
   return(sigma)
 }
+
+
+
+
+RightSC <- function(A,K,normal=FALSE){
+  SVD <- irlba(A,nv=K,nu=K)
+  V <- SVD$v
+  if(normal){
+    Vnorm <- apply(V,1,function(x)sqrt(sum(x^2)))
+    V <- V/(0.001+Vnorm)
+  }
+  km <- kmeans(V,centers=K,iter.max=200,nstart=50)
+  return(km)
+}
+
+
+NSBM.estimate <- function(A,K,g,reg.bound=-Inf){
+  
+  n <- nrow(A)
+  B <- matrix(0,K,K)
+  diag(B) <- 1
+  theta <- rep(1,n)
+  Z <- matrix(0,n,K)
+  Z[cbind(1:n,g)] <- 1
+  N2C <- A%*%Z+1
+  nK <- as.numeric(table(g))
+  N2C <- t(t(N2C)/nK)
+  theta <- N2C[cbind(1:n,g)]
+  Y <- log(N2C)
+  membership.list <- list()
+  for(k in 1:K){
+    membership.list[[k]] <- which(g==k)
+  }
+  ##### estimate B
+  for(k in 1:K){
+    for(l in 1:K){
+      if(l!=k){
+        tmp <- Y[,k]-Y[,l]
+        B[k,l] <- exp(-mean(tmp[membership.list[[k]]]))
+      }
+    }
+  }
+  
+  lambda <- rep(1,n)
+  for(k in 1:K){
+    tmp.mat <- -(Y - Y[,k])
+    tmp.sum <- colMeans(tmp.mat[membership.list[[k]],])
+    tmp <- rowSums(tmp.mat)
+    tmp2 <- sum(tmp.sum)
+    lambda[membership.list[[k]]] <- tmp[membership.list[[k]]]/tmp2
+  }
+  
+  #reg.bound <- -2 ### some regularity lower bound for lambda,for numerical stability
+  if(min(lambda)<reg.bound){
+    for(k in 1:K){
+      index <- which(g==k)
+      tmp.lambda <- lambda[index]
+      incons.index <- which(tmp.lambda< reg.bound)
+      if(length(incons.index)>0){
+        cons.index <- which(tmp.lambda>= reg.bound)
+        tmp.lambda[incons.index] <- -reg.bound
+        tmp.lambda[cons.index] <- tmp.lambda[cons.index]*((length(index)-reg.bound*length(incons.index))/sum(tmp.lambda[cons.index]))
+        lambda[index] <- tmp.lambda
+      }
+    }
+  }
+  
+  
+  P.tilde <- Z%*%B%*%t(Z)
+  for(i in 1:n){
+    P.tilde[i,] <- (P.tilde[i,]^lambda[i])*theta[i]
+  }
+  return(list(B=B,lambda=lambda,theta=theta,P.tilde=P.tilde,g=g))
+  
+}
+
+
+
+
+
+
+
+NSBM.Gen <- function(n,K,avg.d,beta,theta.low=0.1,theta.p=0.2,lambda.scale=0.2,lambda.exp=FALSE){
+  membership <- sample(K,size=n,replace=TRUE)
+  if(length(beta)==1){
+    B <- matrix(beta,K,K)
+    diag(B) <- 1
+  }else{
+    B <- beta
+  }
+  Z <- matrix(0,n,K)
+  Z[cbind(1:n,membership)] <- 1
+  P <- Z%*%B%*%t(Z)
+  if(!lambda.exp){
+    lambda <- rnorm(n)*lambda.scale + 1
+    while(sum(lambda<0)>0.05){
+      lambda <- rnorm(n)*lambda.scale + 1
+    }
+  }else{
+    log.lambda <- lambda.scale*2*runif(n)-lambda.scale
+    lambda <- exp(log.lambda)
+  }
+  theta <- rep(1,n)
+  theta[sample(n,size=ceiling(n*theta.p))] <- theta.low
+  for(k in 1:K){
+    gk <- which(membership==k)
+    lambda[gk] <- lambda[gk]-mean(lambda[gk])+1
+  }
+  P.tilde <- P
+  for(i in 1:n){
+    P.tilde[i,] <- ((P[i,]^lambda[i])*theta[i])
+  }
+  current.avg.d <- mean(rowSums(P.tilde))
+  P.tilde <- P.tilde/current.avg.d*avg.d
+  theta <- theta/current.avg.d*avg.d
+  A <- matrix(0,n,n)
+  A[matrix(runif(n^2),n,n) < P.tilde] <- 1
+  return(list(A=A,P=P,P.tilde=P.tilde,B=B,theta=theta,lambda=lambda,g=membership))
+}
+
+
+
 
