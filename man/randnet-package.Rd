@@ -11,18 +11,20 @@ The package provides model fitting and estimation functions for some
 popular random network models. More importantly, it implements a general
 cross-validation framework for model selection and parameter tuning
 called ECV. Several other model selection methods are also included.
+The work to build and improve this package is partially supported by the NSF
+grants DMS-2015298 and DMS-2015134.
 }
 \details{
 \tabular{ll}{
 Package: \tab randnet\cr
 Type: \tab Package\cr
-Version: \tab 0.3\cr
-Date: \tab 2021-05-04\cr
+Version: \tab 0.4\cr
+Date: \tab 2021-06-07\cr
 License: \tab GPL (>= 2)\cr
 }
 }
 \author{
-  Tianxi Li, Elizaveta Levina, Ji Zhu\cr
+  Tianxi Li, Elizaveta Levina, Ji Zhu, Can M. Le\cr
 
 Maintainer: Tianxi Li <tianxili@virginia.edu>
 
@@ -72,6 +74,8 @@ methods. arXiv preprint arXiv:1507.00827, 2015.
   
     T. Li, E. Levina, and J. Zhu. Community models for networks observed through edge nominations. arXiv preprint arXiv:2008.03652 (2020).
 
+  T. Li and C. M. Le, Network Estimation by Mixing: Adaptivity and More. arXiv preprint
+arXiv:2106.02803, 2021.
 
 }
 \keyword{ package }

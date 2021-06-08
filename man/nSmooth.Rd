@@ -7,7 +7,7 @@ estimates probabilty matrix by neighborhood smoothing
 \description{
   %%  ~~ A concise (1-5 lines) description of what the function does. ~~
   estimates probabilty matrix by neighborhood smoothing of Zhang
-  et. al. (2015)
+  et. al. (2017)
 }
 \usage{
 nSmooth(A, h = NULL)

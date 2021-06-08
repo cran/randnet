@@ -6,7 +6,6 @@ library(Matrix)
 library(entropy)
 
 
-
 BlockModel.Gen <- function(lambda,n,beta=0,K=3,w=rep(1,K),Pi=rep(1,K)/K,rho=0,simple=TRUE,power=TRUE,alpha=5,degree.seed=NULL){
     P0 <- diag(w)
     if(beta > 0){
@@ -1310,6 +1309,316 @@ NSBM.Gen <- function(n,K,avg.d,beta,theta.low=0.1,theta.p=0.2,lambda.scale=0.2,l
   return(list(A=A,P=P,P.tilde=P.tilde,B=B,theta=theta,lambda=lambda,g=membership))
 }
 
+
+
+
+LSM.PGD <- function(A,k,step.size=0.3,niter=500,trace=0){
+  N <- nrow(A)
+  ones = rep(1,N)
+  M = matrix(1, N, N)
+  Jmat <- diag(rep(1,N)) - M/N
+  
+  P.tilde <- USVT(A)
+  P.tilde[P.tilde>(1-1e-5)] <- (1-1e-5)
+  P.tilde[P.tilde< 1e-5] <- 1e-5
+  
+  Theta.tilde <- logit(P.tilde)
+  
+  alpha_0 <- solve(N*diag(rep(1,N))+M,rowSums(Theta.tilde))
+  
+  G <- Jmat%*%(Theta.tilde - outer(alpha_0,alpha_0,"+"))%*%Jmat
+  
+  eig <- eigs_sym(A=G,k = k)
+  eig$values[eig$values<=0] <- 0
+  
+  Z_0 <- t(t(eig$vectors[,1:k])*sqrt(eig$values[1:k]))
+  obj <- NULL
+  step.size.z <- step.size/norm(Z_0,"2")^2
+  step.size.alpha <- step.size/(2*N)
+  for(i in 1:niter){
+    Theta.hat <- alpha_0 %*% t(rep(1,N)) + rep(1, N) %*% t(alpha_0) + Z_0 %*% t(Z_0)
+    Phat <- sigmoid(Theta.hat)
+    tmp.obj <- (sum(A*log(Phat)) + sum((1-A)*log(1-Phat)) - sum(diag(log(1-Phat))))/2
+    if(trace>0){
+      print(tmp.obj)
+    }
+    obj <- c(obj,tmp.obj)
+    Z <- Z_0 + 2*step.size.z*(A-Phat)%*%Z_0
+    alpha <- alpha_0 + 2*step.size.alpha*(A-Phat)%*%matrix(rep(1,N))
+    Z <- Jmat%*%Z
+    
+    Z_0 <- Z
+    alpha_0 <- alpha
+  }
+  
+  Theta.hat <- alpha_0 %*% t(rep(1,N)) + rep(1, N) %*% t(alpha_0) + Z_0 %*% t(Z_0)
+  Phat <- sigmoid(Theta.hat)
+  tmp.obj <- (sum(A*log(Phat)) + sum((1-A)*log(1-Phat)) - sum(diag(log(1-Phat))))/2
+  obj <- c(obj,tmp.obj)
+  return(list(Z=Z,alpha=alpha,Phat=Phat,obj=obj))
+  
+}
+
+
+###  example: 
+# dt <- RDPG.Gen(n=600,K=2,directed=TRUE)
+# 
+# A <- dt$A
+# 
+# fit <- LSM.PGD(A,2)
+
+
+
+
+USVT <- function(A){
+  n <- nrow(A)
+  K <- ceiling(n^(1/3))
+  SVD <- irlba(A,nv=K,nu=K)
+  Ahat <- SVD$u%*%(t(SVD$v)*SVD$d)
+  Ahat[Ahat>1] <- 1
+  Ahat[Ahat<0] <- 0
+  return(Ahat)
+}
+
+
+###  example: 
+# dt <- RDPG.Gen(n=600,K=2,directed=TRUE)
+# 
+# A <- dt$A
+# 
+# fit <- USVT(A)
+
+
+
+
+
+
+sbm.fit = function(A,p,max.K=2){
+  ##fitting the network using SBM
+  ##index - the set of entries for testing
+  n <- nrow(A)
+  
+  A.partial <- A
+  SVD <- irlba((A.partial+mean(colSums(A.partial))*0.05/n)/(1-p),nv=max.K,nu=max.K)
+  SBM.Phat.list <- list()
+  
+  for(k in 1:max.K){
+    km <- kmeans(SVD$u[,1:k],centers=k, nstart = 50, iter.max = 50)
+    SBM.Phat <- SBM.estimate(A.partial,g=km$cluster)$Phat/(1-p)
+    if(sum(is.na(SBM.Phat))>0){
+      SBM.Phat <- matrix(0,n,n)
+    }
+    SBM.Phat.list[[k]] <- SBM.Phat
+  }
+  return(SBM.Phat.list)
+}
+dcsbm.fit = function(A,p,max.K=2){
+  ##fitting the network using DCSBM
+  n <- nrow(A)
+  A.partial <- A
+  
+  SVD <- irlba((A.partial+mean(colSums(A.partial))*0.05/n)/(1-p),nv=max.K,nu=max.K)
+  DCSBM.Phat.list <- list()
+  
+  for(k in 1:max.K){
+    V <- matrix(SVD$v[, 1:k],ncol=k)
+    V.norm <- apply(V, 1, function(x) sqrt(sum(x^2)))
+    V.normalized <- diag(1/V.norm) %*% V
+    km <- kmeans(V.normalized, centers = k, nstart = 50, iter.max = 50)
+    DCSBM.Phat <- DCSBM.estimate(A.partial,g=km$cluster)$Phat/(1-p)
+    if(sum(is.na(DCSBM.Phat))>0){
+      DCSBM.Phat <- matrix(0,n,n)
+    }
+    DCSBM.Phat.list[[k]] <- DCSBM.Phat
+  }
+  return(DCSBM.Phat.list)
+}
+
+
+
+network.mixing <- function(A,index=NULL,max.K=15,rho = 0.1,usvt=TRUE,ns=FALSE,lsm=FALSE,lsm.k=4,trace=FALSE){
+  n <- nrow(A)
+  if(is.null(index)){
+    upper.index <- which(upper.tri(A))
+    n.upper <- length(upper.index)
+    sample.index <- sample(upper.index,size=ceiling(rho*n.upper))
+    tmp.A <- matrix(0,n,n)
+    tmp.A[sample.index] <- NA
+    tmp.A <- tmp.A+t(tmp.A)
+    index <- which(is.na(tmp.A))
+  }
+  A.partial <- A
+  A.partial[index] <- 0
+  Y <- A[index]
+  p <- length(index)/n^2
+  
+  time1<- system.time(SVD <- irlba((A.partial+mean(colSums(A.partial))*0.05/n)/(1-p),nv=max.K,nu=max.K))
+  #print(time1)
+  #SBM.Phat.list <- list()
+  #DCSBM.Phat.list <- list()
+  DCSBM.full.mat <- SBM.full.mat <- matrix(NA,nrow = length(A.partial),ncol=max.K)
+  DCSBM.Xmat <- SBM.Xmat <- matrix(0,ncol=max.K,nrow=length(index))
+  if(trace) print("Fitting block models....")
+  ptm <- proc.time()
+  for(k in 1:max.K){
+    
+    ## SBM fit
+    #print("SBM")
+    ptm <- proc.time()
+    km <- kmeans(SVD$u[,1:k],centers=k, nstart = 50, iter.max = 50)
+    SBM.Phat <- SBM.estimate(A.partial,g=km$cluster)$Phat/(1-p)
+    if(sum(is.na(SBM.Phat))>0){
+      SBM.Phat <- matrix(0,n,n)
+    }
+    #SBM.Phat.list[[k]] <- SBM.Phat
+    SBM.full.mat[,k] <- as.numeric(SBM.Phat)
+    #print(proc.time() - ptm)
+    
+    
+    ## DCSBM fit
+    #print("DCSBM")
+    #ptm <- proc.time()
+    V <- matrix(SVD$v[, 1:k],ncol=k)
+    V.norm <- apply(V, 1, function(x) sqrt(sum(x^2)))
+    V.normalized <- diag(1/V.norm) %*% V
+    km <- kmeans(V.normalized, centers = k, nstart = 50, iter.max = 50)
+    DCSBM.Phat <- DCSBM.estimate(A.partial,g=km$cluster)$Phat/(1-p)
+    if(sum(is.na(DCSBM.Phat))>0){
+      DCSBM.Phat <- matrix(0,n,n)
+    }
+    #DCSBM.Phat.list[[k]] <- DCSBM.Phat
+    DCSBM.full.mat[,k] <- as.numeric(DCSBM.Phat)
+    SBM.Xmat[,k] <- SBM.Phat[index]
+    DCSBM.Xmat[,k] <- DCSBM.Phat[index]
+    #print(proc.time() - ptm)
+    
+  }
+  
+  model.names <- c(paste("SBM",1:max.K,sep=""),paste("DCSBM",1:max.K,sep=""))
+  Xmat <- cbind(SBM.Xmat,DCSBM.Xmat)
+  full.mat <- cbind(SBM.full.mat,DCSBM.full.mat)
+  #### USVT fit
+  if(usvt){
+    if(trace) print("USVT....")
+    time2 <- system.time(usvt.est <- USVT(A.partial)/(1-p))
+    #print(time2)
+    Xmat <- cbind(Xmat,usvt.est[index])
+    full.mat <- cbind(full.mat,as.numeric(usvt.est))
+    model.names <- c(model.names,"USVT")
+  }
+  
+  #### Neighborhood smoothing fit
+  if(ns){
+    if(trace) print("Neighborhood Smoothing....")
+    ns.est <- nSmooth(A.partial)/(1-p)
+    Xmat <- cbind(Xmat,ns.est[index])
+    full.mat <- cbind(full.mat,as.numeric(ns.est))
+    model.names <- c(model.names,"NS")
+  }
+
+  
+  #### Latent space model fit
+  if(lsm){
+    if(trace)  print("Latent space model ....")
+    lsm.est <- LSM.PGD(as.matrix(A.partial),lsm.k,step.size=0.3,niter=50,trace=0)$Phat/(1-p)
+    Xmat <- cbind(Xmat,lsm.est[index])
+    full.mat <- cbind(full.mat,as.numeric(lsm.est))
+    model.names <- c(model.names,"LSM")
+  }
+  
+  
+  ## exponential aggregation
+  X.l2 <- colSums((Xmat-Y)^2)
+  center.l2 <- X.l2 - quantile(X.l2,0.2)
+  exp.weight <- exp(-center.l2)
+  exp.weight <- exp.weight/sum(exp.weight)
+  #exp.Yhat <- Xmat%*%matrix(exp.weight,ncol=1)
+  #exp.Yhat[exp.Yhat<0] <- 0
+  #exp.Yhat[exp.Yhat>1] <- 1
+  exp.Phat <- matrix(full.mat%*%matrix(exp.weight,ncol=1),ncol=n,nrow=n)
+  exp.Phat[exp.Phat<0] <- 0
+  exp.Phat[exp.Phat>1] <- 1
+  
+  ## model selection aggregation (ECV)
+  ecv.weight <- rep(0,length(exp.weight))
+  ecv.weight[which.max(exp.weight)] <- 1
+  #ecv.Yhat <- Xmat%*%matrix(ecv.weight,ncol=1)
+  ecv.Phat <- matrix(full.mat[, which.max(exp.weight)],nrow=n,ncol=n)
+  #ecv.Yhat[ecv.Yhat<0] <- 0
+  #ecv.Yhat[ecv.Yhat>1] <- 1
+  ecv.Phat[ecv.Phat<0] <- 0
+  ecv.Phat[ecv.Phat>1] <- 1
+  
+  
+  #print("Fit OLS")
+  #ptm <- proc.time()
+  ## linear aggregation
+  mixing.df <- data.frame(Xmat)
+  mixing.df$Y <- Y
+  lm.fit <- lm(Y~.-1,data=mixing.df)
+  linear.weight <- lm.fit$coefficients
+  linear.weight[which(is.na(lm.fit$coefficients))] <- 0
+  #linear.Yhat <- Xmat%*%matrix(linear.weight,ncol=1)
+  #linear.Yhat[linear.Yhat>1] <- 1
+  #linear.Yhat[linear.Yhat<0] <- 0
+  linear.Phat <- matrix(full.mat%*%matrix(linear.weight,ncol=1),ncol=n,nrow=n)
+  linear.Phat[linear.Phat>1] <- 1
+  linear.Phat[linear.Phat<0] <- 0
+  #print(proc.time()-ptm)
+  
+ 
+  
+  #print("Fit nnls")
+  #ptm <- proc.time()
+  ## nonnegative least square
+  nnl <- nnls(A=Xmat,b=Y)
+  nnl.weight <- nnl$x
+  #nnl.Yhat <- Xmat%*%matrix(nnl.weight,ncol=1)
+  #nnl.Yhat[nnl.Yhat>1] <- 1
+  #nnl.Yhat[nnl.Yhat<0] <- 0
+  nnl.Phat <- matrix(full.mat%*%matrix(nnl.weight,ncol=1),ncol=n,nrow=n)
+  nnl.Phat[nnl.Phat<0] <- 0
+  nnl.Phat[nnl.Phat>1] <- 1
+  #print(proc.time()-ptm)
+  
+
+  return(list(linear.Phat=linear.Phat,linear.weight=linear.weight,nnl.Phat=nnl.Phat,nnl.weight=nnl.weight,exp.Phat=exp.Phat,exp.weight=exp.weight,ecv.Phat=ecv.Phat,ecv.weight=ecv.weight,model.names=model.names))
+}
+
+# dt <- RDPG.Gen(n=600,K=2,directed=TRUE)
+# 
+# A <- dt$A
+# 
+# fit <- network.mixing(A)
+# fit$model.names
+# fit$nnl.weight
+
+
+
+
+network.mixing.Bfold <- function(A,B=10,rho = 0.1,max.K=15,usvt=TRUE,ns=FALSE,lsm=FALSE,lsm.k=4){
+  n <- nrow(A)
+  upper.index <- which(upper.tri(A))
+  n.upper <- length(upper.index)
+  rf.Phat <- NULL
+  linear.Phat=linear.Phat <- nnl.Phat <- exp.Phat <- ecv.Phat <- matrix(0,n,n)
+  for(b in 1:B){
+    print(paste("Fold",b))
+    sample.index <- sample(upper.index,size=ceiling(rho*n.upper))
+    tmp.A <- matrix(0,n,n)
+    tmp.A[sample.index] <- NA
+    tmp.A <- tmp.A+t(tmp.A)
+    index <- which(is.na(tmp.A))
+    tmp.fit <- network.mixing(A=A,index=index,max.K=max.K,rho = rho,ns=ns,usvt=usvt,lsm=lsm,lsm.k=lsm.k)
+    linear.Phat <- linear.Phat + tmp.fit$linear.Phat/B
+    nnl.Phat <- nnl.Phat + tmp.fit$nnl.Phat/B
+    exp.Phat <- exp.Phat + tmp.fit$exp.Phat/B
+    ecv.Phat <- ecv.Phat + tmp.fit$ecv.Phat/B
+
+  }
+  return(list(linear.Phat=linear.Phat,nnl.Phat=nnl.Phat,exp.Phat=exp.Phat,ecv.Phat=ecv.Phat,model.names=tmp.fit$model.names))
+  
+}
 
 
 
