@@ -18,8 +18,8 @@ grants DMS-2015298 and DMS-2015134.
 \tabular{ll}{
 Package: \tab randnet\cr
 Type: \tab Package\cr
-Version: \tab 0.4\cr
-Date: \tab 2021-06-07\cr
+Version: \tab 0.5\cr
+Date: \tab 2022-01-01\cr
 License: \tab GPL (>= 2)\cr
 }
 }
@@ -76,6 +76,8 @@ methods. arXiv preprint arXiv:1507.00827, 2015.
 
   T. Li and C. M. Le, Network Estimation by Mixing: Adaptivity and More. arXiv preprint
 arXiv:2106.02803, 2021.
+
+R. Miao and T. Li. Informative core identification in complex networks. arXiv preprint arXiv:2101.06388, 2021
 
 }
 \keyword{ package }

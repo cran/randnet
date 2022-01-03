@@ -1622,3 +1622,39 @@ network.mixing.Bfold <- function(A,B=10,rho = 0.1,max.K=15,usvt=TRUE,ns=FALSE,ls
 
 
 
+
+InformativeCore <- function(A,r=3){
+  n <- nrow(A)
+  r = max(r, 2)
+  degree = rowSums(A)
+  iso.idx = (degree==0)
+  er.score <- config.score <- rep(0, nrow(A))
+  
+  A = A[!iso.idx, !iso.idx]
+  
+  svd.fit = irlba(A, nv=min(r+1, nrow(A)), maxit = 200)
+  A.recon = svd.fit$u[,1:r,drop=FALSE]  %*% (t( svd.fit$v[,1:r,drop=FALSE] )*svd.fit$d[1:r])
+  score = apply(A.recon, 1, sd) * sqrt(nrow(A.recon)-1)
+  er.score[!iso.idx] <- score
+  
+  A.recon.normal = t(t(A.recon)/rowSums(A))#A.recon %*% diag( 1/rowSums(A) )
+  score = apply(A.recon.normal, 1, sd) * sqrt(nrow(A.recon.normal)-1)
+  config.score[!iso.idx] <- score
+  
+  phat <- (sum(A))/(n^2-n)
+  er.theory.thr <- sqrt(0.99*phat*log(n))
+  er.theory.core <- which(er.score > er.theory.thr)
+  
+  config.theory.thr <- sqrt(log(n))/(n*sqrt(phat^1.01))
+  config.theory.core <- which(config.score > config.theory.thr)
+  
+  er.kmeans <- kmeans(er.score,centers=2,iter.max=100,nstart=50)
+  er.kmeans.core <- which(er.kmeans$cluster==which.max(er.kmeans$centers))
+  
+  config.kmeans <- kmeans(config.score,centers=2,iter.max=100,nstart=50)
+  config.kmeans.core <- which(config.kmeans$cluster==which.max(config.kmeans$centers))
+  
+  
+  
+  return(list(er.score=er.score,config.score=config.score,er.theory.core=er.theory.core,er.kmeans.core=er.kmeans.core,config.theory.core=config.theory.core,config.kmeans.core=config.kmeans.core))
+}

@@ -1,6 +1,6 @@
-26181ac7e4c4f13d83064b7a95bad721 *DESCRIPTION
-2bba8035c5e81d51f9a605a391cc4c92 *NAMESPACE
-1c5796ca1f41ef9a3d0d2318df4a10c2 *R/RCode.R
+e28703f5eb7701159c0cabbe5afec98f *DESCRIPTION
+5850d1091aa981afc91a8e7f893600b4 *NAMESPACE
+d356eab82211981b8dec7bae271e69e3 *R/RCode.R
 f780760f547014e571162e8e4be4dd1a *man/BHMC.estimate.Rd
 9d8585bd655a1af170334d410322d1f5 *man/BlockModel.Gen.Rd
 32d8a8c50d4805bdf6d368b7a2c606b7 *man/ConcensusClust.Rd
@@ -8,6 +8,7 @@ d75bd2679e7eb7f150be7a8999e84a0f *man/DCSBM.estimate.Rd
 048ccf0643705f90db9fe8402cf5eb65 *man/ECV.Rank.Rd
 f87415d4051e6911457c6087eb519b9b *man/ECV.block.Rd
 35f91ce5efec3b8312de00e8ce78e755 *man/ECV.nSmooth.lowrank.Rd
+025b62e9defea102915e795b30bd5e31 *man/InformativeCore.Rd
 802b8153aa1d13be941570b3da466ca3 *man/LRBIC.Rd
 dbb95e084168e8b54afb7970ba909704 *man/LSM.PGD.Rd
 a70c43da79eca2953344361fcb1a228c *man/NCV.select.Rd
@@ -21,6 +22,6 @@ fa13bd0522d5bb284db066a30b726166 *man/USVT.Rd
 4c1e69ce22bc21d6b5a175f729950246 *man/nSmooth.Rd
 809968bc5da8bd98fe51163b4b7efd8d *man/network.mixing.Bfold.Rd
 f2ae005b3148d7c0a27518f764213087 *man/network.mixing.Rd
-fe7a4633f34a35c6120cce6abcfa9d73 *man/randnet-package.Rd
+733544d7b4b525634e472ecc355a56b4 *man/randnet-package.Rd
 b46dd5a30cad2163542f77252b3b5a8f *man/reg.SP.Rd
 c72c824dfcb40290df0706343f0b8b63 *man/reg.SSP.Rd
