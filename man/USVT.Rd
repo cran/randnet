@@ -1,18 +1,15 @@
 \name{USVT}
 \alias{USVT}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 estimates the network probability matrix by the improved universal singular value thresholding
 }
 \description{
-  %%  ~~ A concise (1-5 lines) description of what the function does. ~~
   estimates the network probability matrix by the universal singular value thresholding of Chatterjee (2015), with the improvement mentioned in Zhang et. al. (2017).
 
 }
 \usage{
 USVT(A)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{A}{
 adjacency matrix
@@ -35,7 +32,6 @@ The estimated probability matrix.
   Y. Zhang, E. Levina, and J. Zhu. Estimating network edge probabilities by neighbourhood smoothing. Biometrika, 104(4):771-783, 2017.
 }
 \author{
-  %%  ~~who you are~~
   Tianxi Li and Can M. Le\cr
   Maintainer: Tianxi Li  \email{tianxili@virginia.edu}
 }
@@ -54,6 +50,4 @@ A <- dt$A
 fit <- USVT(A)
 
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ singular value thresholding}

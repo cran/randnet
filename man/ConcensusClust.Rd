@@ -1,17 +1,14 @@
 \name{ConsensusClust}
 \alias{ConsensusClust}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 clusters nodes by concensus (majority voting) initialized by regularized spectral clustering
 }
 \description{
-  %%  ~~ A concise (1-5 lines) description of what the function does. ~~
   community detection by concensus (majority voting) initialized by regularized spectral clustering
 }
 \usage{
 ConsensusClust(A,K,tau=0.25,lap=TRUE)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{A}{
 adjacency matrix
@@ -38,15 +35,12 @@ rate under the SBM. However, it can slow compared with spectral clustering.
 
 \value{
 cluster labels
-%% ...
 }
 \references{
-  %% ~put references to the literature/web site here ~
 Gao, C.; Ma, Z.; Zhang, A. Y. & Zhou, H. H. Achieving optimal misclassification proportion in stochastic block models The Journal of Machine Learning Research, JMLR. org, 2017, 18, 1980-2024
 
 }
 \author{
-  %%  ~~who you are~~
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
 
 Maintainer: Tianxi Li <tianxili@virginia.edu>
@@ -58,19 +52,14 @@ Maintainer: Tianxi Li <tianxili@virginia.edu>
 \examples{
 
 
-dt <- BlockModel.Gen(15,300,K=3,beta=0.2,rho=0)
+dt <- BlockModel.Gen(15,50,K=2,beta=0.2,rho=0)
 
 
 A <- dt$A
 
 
-#cc <- ConsensusClust(A,K=3,lap=TRUE)
-# takes about 25 seconds
-
-#NMI(cc,dt$g)
+cc <- ConsensusClust(A,K=2,lap=TRUE)
 
 
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ community detection }

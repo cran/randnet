@@ -1,6 +1,5 @@
 \name{DCSBM.estimate}
 \alias{DCSBM.estimate}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Estimates DCSBM model
 }
@@ -11,7 +10,6 @@ Estimates DCSBM model
 \usage{
 DCSBM.estimate(A, g)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{A}{
 adjacency matrix
@@ -29,15 +27,12 @@ A list object of
 \item{B }{the B matrix with block connection probability, up to a
   scaling constant}
 \item{Psi }{vector of of degree parameter theta, up to a scaling constant}
-%% ...
 }
 \references{
-  %% ~put references to the literature/web site here ~
   B. Karrer and M. E. Newman. Stochastic blockmodels and community structure in networks.
 Physical Review E, 83(1):016107, 2011.
 }
 \author{
-  %%  ~~who you are~~
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
   Maintainer: Tianxi Li  \email{tianxili@virginia.edu}
 }
@@ -59,6 +54,4 @@ est <- DCSBM.estimate(A,ssc$cluster)
 
   }
 
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ DCSBM }

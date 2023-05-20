@@ -1,17 +1,14 @@
 \name{reg.SP}
 \alias{reg.SP}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 clusters nodes by regularized spectral clustering
 }
 \description{
-  %%  ~~ A concise (1-5 lines) description of what the function does. ~~
   community detection by regularized spectral clustering
 }
 \usage{
 reg.SP(A, K, tau = 1, lap = FALSE,nstart=30,iter.max=100)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{A}{
 adjacency matrix
@@ -46,10 +43,8 @@ clustering under SBM.
 a list of
  \item{cluster }{cluster labels}
 \item{loss }{the loss of Kmeans algorithm}
-%% ...
 }
 \references{
-  %% ~put references to the literature/web site here ~
   K. Rohe, S. Chatterjee, and B. Yu. Spectral clustering and the
 high-dimensional stochastic blockmodel. The Annals of Statistics, pages
 1878-1915, 2011.
@@ -67,7 +62,6 @@ Random Structures & Algorithms, 2017.
 
 }
 \author{
-  %%  ~~who you are~~
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
 
 Maintainer: Tianxi Li <tianxili@virginia.edu>
@@ -92,6 +86,4 @@ NMI(sc$cluster,dt$g)
 
 
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ community detection }

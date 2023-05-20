@@ -18,8 +18,8 @@ grants DMS-2015298 and DMS-2015134.
 \tabular{ll}{
 Package: \tab randnet\cr
 Type: \tab Package\cr
-Version: \tab 0.5\cr
-Date: \tab 2022-01-01\cr
+Version: \tab 0.7\cr
+Date: \tab 2023-05-11\cr
 License: \tab GPL (>= 2)\cr
 }
 }
@@ -79,6 +79,7 @@ arXiv:2106.02803, 2021.
 
 R. Miao and T. Li. Informative core identification in complex networks. arXiv preprint arXiv:2101.06388, 2021
 
+  Sischka, B. and Kauermann, G., 2022. EM-based smooth graphon estimation using MCMC and spline-based approaches. Social Networks, 68, pp.279-295.
 }
 \keyword{ package }
 

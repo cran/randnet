@@ -1,18 +1,15 @@
 \name{NMI}
 \alias{NMI}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 calculates normalized mutual information
 }
 \description{
-  %%  ~~ A concise (1-5 lines) description of what the function does. ~~
   calculates normalized mutual information, a metric that is commonly
   used to compare clustering results
 }
 \usage{
 NMI(g1, g2)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{g1}{
 a vector of cluster labels
@@ -28,7 +25,6 @@ NMI value
 
 
 \author{
-  %%  ~~who you are~~
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
   Maintainer: Tianxi Li  \email{tianxili@virginia.edu}
 }

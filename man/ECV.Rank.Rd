@@ -1,6 +1,5 @@
 \name{ECV.Rank}
 \alias{ECV.Rank}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 estimates optimal low rank model for a network
 }
@@ -10,7 +9,6 @@ estimates the optimal low rank model for a network
 \usage{
 ECV.Rank(A, max.K, B = 3, holdout.p = 0.1, weighted = TRUE,mode="directed")
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{A}{
 adjacency matrix
@@ -40,7 +38,6 @@ slower than SSE, even slower than matrix completion steps.
 
 Note that we do not have to assume the true model is low rank. This
 function simply finds a best low-rank approximation to the true model.
-%%  ~~ If necessary, more details than the description above ~~
 }
 \value{
 A list of
@@ -48,14 +45,11 @@ A list of
 \item{auc.rank }{rank selection by AUC loss}
 \item{auc }{auc sequence for each rank candidate}
 \item{sse }{sse sequence for each rank candidate}
-%% ...
 }
 \references{
-  %% ~put references to the literature/web site here ~
   T. Li, E. Levina, and J. Zhu. Network cross-validation by edge sampling. Biometrika, 107(2), pp.257-276, 2020.
 }
 \author{
-  %%  ~~who you are~~
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
   Maintainer: Tianxi Li  \email{tianxili@virginia.edu}
 }
@@ -76,6 +70,4 @@ ecv.rank <- ECV.Rank(A,6,weighted=FALSE,mode="undirected")
 ecv.rank
 
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ rank estimation }

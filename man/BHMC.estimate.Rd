@@ -1,6 +1,5 @@
 \name{BHMC.estimate}
 \alias{BHMC.estimate}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Estimates the number of communities under block models by the spectral
 methods
@@ -13,7 +12,6 @@ spectral properties of network Beth-Hessian matrix with moment correction.
 \usage{
 BHMC.estimate(A, K.max = 15)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{A}{
 adjacency matrix of the network
@@ -30,7 +28,6 @@ the maximum possible number of communities to check
 A list of result
   \item{K }{Estimated K}
   \item{values }{eigenvalues of the Beth-Hessian matrix}
-%% ...
 }
 \references{
 C. M. Le and E. Levina. Estimating the number of communities in networks by spectral

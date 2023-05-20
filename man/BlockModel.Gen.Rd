@@ -1,6 +1,5 @@
 \name{BlockModel.Gen}
 \alias{BlockModel.Gen}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Generates networks from degree corrected stochastic block model
 }
@@ -13,7 +12,6 @@ BlockModel.Gen(lambda, n, beta = 0, K = 3, w = rep(1, K),
  Pi = rep(1, K)/K, rho = 0, simple = TRUE, power = TRUE,
 alpha = 5, degree.seed = NULL)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{lambda}{
 average node degree
@@ -65,7 +63,6 @@ A list of
  \item{g }{community membership}
  \item{P }{probability matrix of the network}
  \item{theta }{node degree parameter}
-%% ...
 }
 \references{
   B. Karrer and M. E. Newman. Stochastic blockmodels and community structure in networks.
@@ -79,7 +76,6 @@ T. Li, E. Levina, and J. Zhu. Network cross-validation by edge sampling. Biometr
 
 }
 \author{
-  %%  ~~who you are~~
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
   Maintainer: Tianxi Li  \email{tianxili@virginia.edu}
 }
@@ -91,6 +87,4 @@ dt <- BlockModel.Gen(30,300,K=3,beta=0.2,rho=0.9,simple=FALSE,power=TRUE)
 
 
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ SBM }

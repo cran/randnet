@@ -1,18 +1,15 @@
 \name{nSmooth}
 \alias{nSmooth}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 estimates probabilty matrix by neighborhood smoothing
 }
 \description{
-  %%  ~~ A concise (1-5 lines) description of what the function does. ~~
   estimates probabilty matrix by neighborhood smoothing of Zhang
   et. al. (2017)
 }
 \usage{
 nSmooth(A, h = NULL)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{A}{
 adjacency matrix
@@ -32,13 +29,11 @@ networks, though it is one of the fastest methods for graphon models.
 the probability matrix
 }
 \references{
-  %% ~put references to the literature/web site here ~
 
   Zhang, Y.; Levina, E. & Zhu, J. Estimating network edge probabilities by neighbourhood smoothing Biometrika, Oxford University Press, 2017, 104, 771-783
 
 }
 \author{
-  %%  ~~who you are~~
     Tianxi Li, Elizaveta Levina, Ji Zhu\cr
 
 Maintainer: Tianxi Li <tianxili@virginia.edu>
@@ -47,15 +42,13 @@ Maintainer: Tianxi Li <tianxili@virginia.edu>
 \examples{
 
 
-N <- 300
+N <- 100
 
 U = matrix(1:N,nrow=1) / (N+1)
 V = matrix(1:N,nrow=1) / (N+1)
 
 W = (t(U))^2%*%matrix(1,nrow=1,ncol=N)+matrix(1,nrow=N,ncol=1)%*%(V^2)
 W = W/3*cos(1/(W + 1e-7)) + 0.15
-
-
 
 upper.index <- which(upper.tri(W))
 
@@ -71,9 +64,7 @@ A[edge.index] <- 1
 A <- A + t(A)
 diag(A) <- 0
 
-#What <- nSmooth(A)
+What <- nSmooth(A)
 
 
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.

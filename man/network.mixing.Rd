@@ -1,18 +1,15 @@
 \name{network.mixing}
 \alias{network.mixing}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 estimates network connection probability by network mixing
 }
 \description{
-  %%  ~~ A concise (1-5 lines) description of what the function does. ~~
   estimates network connection probability by network mixing of Li and Le (2021).
 }
 \usage{
-network.mixing(A,index=NULL,max.K=15,rho = 0.1,usvt=TRUE,ns=FALSE,
+network.mixing(A,index=NULL,rho = 0.1,max.K=15,dcsbm=TRUE, usvt=TRUE,ns=FALSE,
                            lsm=FALSE,lsm.k=4,trace=FALSE)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{A}{
 adjacency matrix
@@ -21,12 +18,15 @@ adjacency matrix
 a pre-specified hold-out set. If NULL, the set will be randomly generated according to rho.
 }
 
-  \item{max.K}{
-the maximum number of blocks used for the block model approximation (see details). 
-}
 
   \item{rho}{
 hold-out proportion as validation entries. Only effective when index is NULL.
+}
+  \item{max.K}{
+the maximum number of blocks used for the block model approximation (see details). 
+}
+  \item{dcsbm}{
+whether to include the DCSBM as components, up to max.K. By default, the method will include it.
 }
   \item{usvt}{
 whether to include the USVT as a component. By default, the method will include it.
@@ -70,7 +70,6 @@ arXiv:2106.02803, 2021.
 
 }
 \author{
-  %%  ~~who you are~~
     Tianxi Li and Can M. Le\cr
 
 Maintainer: Tianxi Li <tianxili@virginia.edu>
@@ -88,5 +87,3 @@ fit$model.names
 
 fit$nnl.weight
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.

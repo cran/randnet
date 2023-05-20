@@ -1,6 +1,5 @@
 \name{ECV.block}
 \alias{ECV.block}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 selecting block models by ECV
 }
@@ -12,7 +11,6 @@ select K.
 \usage{
 ECV.block(A, max.K, cv = NULL, B = 3, holdout.p = 0.1, tau = 0, dc.est = 2, kappa = NULL)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{A}{
 adjacency matrix
@@ -39,12 +37,10 @@ likelihood is used. If dc.est=1, the method used by Chen and Lei (2016)
 is used, which is less stable according to our observation.
 }
   \item{kappa}{
-    %%     ~~Describe \code{kappa} here~~
     constant for numerical stability only. Not useful for current version.
 }
 }
 \details{
-  %%  ~~ If necessary, more details than the description above ~~
   The current version is based on a simple matrix completion procedure,
   as described in the paper. The performance can be improved by better
   matrix completion method that will be implemented in next
@@ -63,14 +59,11 @@ is used, which is less stable according to our observation.
 \item{l2.model }{selected model by L_2 loss}
 \item{dev.model }{selected model by binomial deviance loss}
 \item{l2.mat, dc.l2.mat,... }{cross-validation loss matrix for B replications}
-%% ...
 }
 \references{
-  %% ~put references to the literature/web site here ~
   T. Li, E. Levina, and J. Zhu. Network cross-validation by edge sampling. Biometrika, 107(2), pp.257-276, 2020.
 }
 \author{
-  %%  ~~who you are~~
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
   Maintainer: Tianxi Li  \email{tianxili@virginia.edu}
 }
@@ -101,6 +94,4 @@ which.max(ecv$auc)
 which.min(ecv$sse)
 
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ ECV }

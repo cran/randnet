@@ -1,6 +1,5 @@
 \name{NSBM.Gen}
 \alias{NSBM.Gen}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Generates networks from nomination stochastic block model
 }
@@ -11,7 +10,6 @@ Generates networks from nomination stochastic block model for community structur
 NSBM.Gen( n, K, avg.d,beta,theta.low=0.1,
     theta.p=0.2,lambda.scale=0.2,lambda.exp=FALSE)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{n}{
  size of network
@@ -48,7 +46,6 @@ A list of
  \item{B }{B parameter}
  \item{lambda }{lambda parameter}
  \item{theta }{theta parameter}
-%% ...
 }
 \references{
   T. Li, E. Levina, and J. Zhu. Community models for networks observed through edge nominations. arXiv preprint arXiv:2008.03652 (2020).
@@ -56,7 +53,6 @@ A list of
 
 }
 \author{
-  %%  ~~who you are~~
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
   Maintainer: Tianxi Li  \email{tianxili@virginia.edu}
 }
@@ -68,6 +64,4 @@ dt <- NSBM.Gen(n=200,K=2,beta=0.2,avg.d=10)
 
 
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ BlockModel.Gen }

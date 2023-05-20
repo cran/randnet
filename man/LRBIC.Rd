@@ -1,18 +1,15 @@
 \name{LRBIC}
 \alias{LRBIC}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 selecting number of communities by asymptotic likelihood ratio
 }
 \description{
-  %%  ~~ A concise (1-5 lines) description of what the function does. ~~
   selecting number of communities by asymptotic likelihood ratio based
   the methdo of Wang and Bickel 2015
 }
 \usage{
 LRBIC(A, Kmax, lambda = NULL, model = "both")
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{A}{
 adjacency matrix
@@ -44,15 +41,12 @@ a list of
 \item{DCSBM.K }{estimated number of communities under DCSBM}
 \item{SBM.BIC }{the BIC values for the K sequence under SBM}
 \item{DCSBM.BIC }{the BIC values for the K sequence under DCSBM}
-%% ...
 }
 \references{
-  %% ~put references to the literature/web site here ~
   Wang, Y. R. & Bickel, P. J. Likelihood-based model selection for stochastic block models The Annals of Statistics, Institute of Mathematical Statistics, 2017, 45, 500-528
 
 }
 \author{
-  %%  ~~who you are~~
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
   Maintainer: Tianxi Li  \email{tianxili@virginia.edu}
 }
@@ -78,6 +72,4 @@ lrbic$SBM.K
 lrbic$DCSBM.K
 
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ community detection }

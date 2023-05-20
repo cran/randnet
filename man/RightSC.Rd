@@ -1,17 +1,14 @@
 \name{RightSC}
 \alias{RightSC}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 clusters nodes in a directed network by regularized spectral clustering on right singular vectors
 }
 \description{
-  %%  ~~ A concise (1-5 lines) description of what the function does. ~~
   community detection by regularized spectral clustering on right singular vectors
 }
 \usage{
 RightSC(A, K, normal = FALSE)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{A}{
 adjacency matrix of a directed adjacecy matrix
@@ -32,7 +29,6 @@ This is essentially the spectral clustering applied on right singular vectors. I
 a list of
  \item{cluster }{cluster labels}
 \item{loss }{the loss of Kmeans algorithm}
-%% ...
 }
 \references{
 
@@ -41,7 +37,6 @@ a list of
 
 }
 \author{
-  %%  ~~who you are~~
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
 
 Maintainer: Tianxi Li <tianxili@virginia.edu>
@@ -63,6 +58,4 @@ sc <- RightSC(A,K=2)
 
 
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ community detection }
