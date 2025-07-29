@@ -18,15 +18,15 @@ grants DMS-2015298 and DMS-2015134.
 \tabular{ll}{
 Package: \tab randnet\cr
 Type: \tab Package\cr
-Version: \tab 0.7\cr
-Date: \tab 2023-05-11\cr
+Version: \tab 1.0\cr
+Date: \tab 2025-07-28\cr
 License: \tab GPL (>= 2)\cr
 }
 }
 \author{
   Tianxi Li, Elizaveta Levina, Ji Zhu, Can M. Le\cr
 
-Maintainer: Tianxi Li <tianxili@virginia.edu>
+Maintainer: Tianxi Li <tianxili@umn.edu>
 
 }
 \references{
@@ -72,14 +72,15 @@ methods. arXiv preprint arXiv:1507.00827, 2015.
 
   Gao, C.; Ma, Z.; Zhang, A. Y. & Zhou, H. H. Achieving optimal misclassification proportion in stochastic block models The Journal of Machine Learning Research, JMLR. org, 2017, 18, 1980-2024
   
-    T. Li, E. Levina, and J. Zhu. Community models for networks observed through edge nominations. arXiv preprint arXiv:2008.03652 (2020).
+    Li, T., Levina, E. and Zhu, J., 2023. Community models for networks observed through edge nominations. Journal of Machine Learning Research, 24(282), pp.1-36.
 
-  T. Li and C. M. Le, Network Estimation by Mixing: Adaptivity and More. arXiv preprint
-arXiv:2106.02803, 2021.
+Li, T. and Le, C.M., 2024. Network estimation by mixing: Adaptivity and more. Journal of the American Statistical Association, 119(547), pp.2190-2205.
 
-R. Miao and T. Li. Informative core identification in complex networks. arXiv preprint arXiv:2101.06388, 2021
+Miao, R. and Li, T., 2023. Informative core identification in complex networks. Journal of the Royal Statistical Society Series B: Statistical Methodology, 85(1), pp.108-126.
 
   Sischka, B. and Kauermann, G., 2022. EM-based smooth graphon estimation using MCMC and spline-based approaches. Social Networks, 68, pp.279-295.
+  
+  Ma, Z., Ma, Z. and Yuan, H., 2020. Universal latent space model fitting for large networks with edge covariates. Journal of Machine Learning Research, 21(4), pp.1-67.
 }
 \keyword{ package }
 

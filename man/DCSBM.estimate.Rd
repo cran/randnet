@@ -34,7 +34,7 @@ Physical Review E, 83(1):016107, 2011.
 }
 \author{
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
-  Maintainer: Tianxi Li  \email{tianxili@virginia.edu}
+  Maintainer: Tianxi Li  \email{tianxili@umn.edu}
 }
 
 \seealso{

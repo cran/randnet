@@ -32,12 +32,12 @@ A list of
 %% ...
 }
 \references{
-  R. Miao and T. Li. Informative core identification in complex networks. arXiv preprint arXiv:2101.06388, 2021
+  Miao, Ruizhong, and Tianxi Li. "Informative core identification in complex networks." Journal of the Royal Statistical Society Series B: Statistical Methodology 85.1 (2023): 108-126.
 
 }
 \author{
   Tianxi Li, Elizaveta Levina, Ji Zhu, Can M. Le\cr
-  Maintainer: Tianxi Li  \email{tianxili@virginia.edu}
+  Maintainer: Tianxi Li  \email{tianxili@umn.edu}
 }
 
 \seealso{

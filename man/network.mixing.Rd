@@ -63,16 +63,14 @@ a list of
 \item{model.names}{the names of all individual models, in the same order as the weights}
 }
 \references{
-  %% ~put references to the literature/web site here ~
-
-  T. Li and C. M. Le, Network Estimation by Mixing: Adaptivity and More. arXiv preprint
-arXiv:2106.02803, 2021.
+ 
+  Li, Tianxi, and Can M. Le. "Network estimation by mixing: Adaptivity and more." Journal of the American Statistical Association 119.547 (2024): 2190-2205.
 
 }
 \author{
     Tianxi Li and Can M. Le\cr
 
-Maintainer: Tianxi Li <tianxili@virginia.edu>
+Maintainer: Tianxi Li <tianxili@umn.edu>
 }
 
 \examples{

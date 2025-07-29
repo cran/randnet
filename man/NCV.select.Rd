@@ -40,7 +40,7 @@ Chen, K. & Lei, J. Network cross-validation for determining the number of commun
 }
 \author{
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
-  Maintainer: Tianxi Li  \email{tianxili@virginia.edu}
+  Maintainer: Tianxi Li  \email{tianxili@umn.edu}
 }
 
 \seealso{

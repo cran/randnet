@@ -35,7 +35,7 @@ methods. arXiv preprint arXiv:1507.00827, 2015.
 }
 \author{
 Tianxi Li, Elizaveta Levina, Ji Zhu\cr
-Maintainer: Tianxi Li  \email{tianxili@virginia.edu}
+Maintainer: Tianxi Li  \email{tianxili@umn.edu}
 }
 
 \seealso{

@@ -45,7 +45,7 @@ covariates. Journal of Machine Learning Research, 21(4):1-67, 2020.
 }
 \author{
   Tianxi Li and Can M. Le\cr
-  Maintainer: Tianxi Li  \email{tianxili@virginia.edu}
+  Maintainer: Tianxi Li  \email{tianxili@umn.edu}
 }
 
 \seealso{

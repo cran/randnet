@@ -59,7 +59,7 @@ Annals of Statistics, 43(1):215-237, 2014.
 \author{
     Tianxi Li, Elizaveta Levina, Ji Zhu\cr
 
-Maintainer: Tianxi Li <tianxili@virginia.edu>
+Maintainer: Tianxi Li <tianxili@umn.edu>
 }
 
 \seealso{

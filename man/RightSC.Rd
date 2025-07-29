@@ -32,14 +32,14 @@ a list of
 }
 \references{
 
-  T. Li, E. Levina, and J. Zhu. Community models for networks observed through edge nominations. arXiv preprint arXiv:2008.03652 (2020).
+ Li, T., Levina, E. and Zhu, J., 2023. Community models for networks observed through edge nominations. Journal of Machine Learning Research, 24(282), pp.1-36.
 
 
 }
 \author{
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
 
-Maintainer: Tianxi Li <tianxili@virginia.edu>
+Maintainer: Tianxi Li <tianxili@umn.edu>
 }
 
 \seealso{

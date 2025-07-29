@@ -4,7 +4,7 @@
 Generates networks from nomination stochastic block model
 }
 \description{
-Generates networks from nomination stochastic block model for community structure in edge nomination procedures, proposed in Li et. al. (2020)
+Generates networks from nomination stochastic block model for community structure in edge nomination procedures, proposed in Li et. al. (2023)
 }
 \usage{
 NSBM.Gen( n, K, avg.d,beta,theta.low=0.1,
@@ -48,13 +48,12 @@ A list of
  \item{theta }{theta parameter}
 }
 \references{
-  T. Li, E. Levina, and J. Zhu. Community models for networks observed through edge nominations. arXiv preprint arXiv:2008.03652 (2020).
-
+Li, T., Levina, E. and Zhu, J., 2023. Community models for networks observed through edge nominations. Journal of Machine Learning Research, 24(282), pp.1-36.
 
 }
 \author{
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
-  Maintainer: Tianxi Li  \email{tianxili@virginia.edu}
+  Maintainer: Tianxi Li  \email{tianxili@umn.edu}
 }
 
 \examples{

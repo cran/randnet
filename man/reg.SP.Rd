@@ -64,7 +64,7 @@ Random Structures & Algorithms, 2017.
 \author{
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
 
-Maintainer: Tianxi Li <tianxili@virginia.edu>
+Maintainer: Tianxi Li <tianxili@umn.edu>
 }
 
 \seealso{

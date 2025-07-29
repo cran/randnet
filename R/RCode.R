@@ -1310,53 +1310,42 @@ NSBM.Gen <- function(n,K,avg.d,beta,theta.low=0.1,theta.p=0.2,lambda.scale=0.2,l
 
 
 
-LSM.PGD <- function(A,k,step.size=0.3,niter=500,trace=0){
-  N <- nrow(A)
-  ones = rep(1,N)
-  M = matrix(1, N, N)
-  Jmat <- diag(rep(1,N)) - M/N
-
-  P.tilde <- USVT(A)
-  P.tilde[P.tilde>(1-1e-5)] <- (1-1e-5)
-  P.tilde[P.tilde< 1e-5] <- 1e-5
-
-  Theta.tilde <- logit(P.tilde)
-
-  alpha_0 <- solve(N*diag(rep(1,N))+M,rowSums(Theta.tilde))
-
-  G <- Jmat%*%(Theta.tilde - outer(alpha_0,alpha_0,"+"))%*%Jmat
-
-  eig <- eigs_sym(A=G,k = k)
-  eig$values[eig$values<=0] <- 0
-
-  Z_0 <- t(t(eig$vectors[,1:k])*sqrt(eig$values[1:k]))
-  obj <- NULL
-  step.size.z <- step.size/norm(Z_0,"2")^2
-  step.size.alpha <- step.size/(2*N)
-  for(i in 1:niter){
-    Theta.hat <- alpha_0 %*% t(rep(1,N)) + rep(1, N) %*% t(alpha_0) + Z_0 %*% t(Z_0)
-    Phat <- sigmoid(Theta.hat)
-    tmp.obj <- (sum(A*log(Phat)) + sum((1-A)*log(1-Phat)) - sum(diag(log(1-Phat))))/2
-    if(trace>0){
-      print(tmp.obj)
-    }
-    obj <- c(obj,tmp.obj)
-    Z <- Z_0 + 2*step.size.z*(A-Phat)%*%Z_0
-    alpha <- alpha_0 + 2*step.size.alpha*(A-Phat)%*%matrix(rep(1,N))
-    Z <- Jmat%*%Z
-
-    Z_0 <- Z
-    alpha_0 <- alpha
-  }
-
-  Theta.hat <- alpha_0 %*% t(rep(1,N)) + rep(1, N) %*% t(alpha_0) + Z_0 %*% t(Z_0)
-  Phat <- sigmoid(Theta.hat)
-  tmp.obj <- (sum(A*log(Phat)) + sum((1-A)*log(1-Phat)) - sum(diag(log(1-Phat))))/2
-  obj <- c(obj,tmp.obj)
-  return(list(Z=Z,alpha=alpha,Phat=Phat,obj=obj))
-
+# Logit and sigmoid functions
+logit <- function(p) {
+  log(p / (1 - p))
+}
+sigmoid <- function(x) {
+  1 / (1 + exp(-x))
 }
 
+# New LSM.PGD function that wraps the C++ code
+LSM.PGD <- function(A, k, step.size = 0.3, niter = 500, trace = 0) {
+  N <- nrow(A)
+  ones <- rep(1, N)
+  M <- matrix(1, N, N)
+  Jmat <- diag(rep(1, N)) - M / N
+  
+  # Obtain a preliminary estimate using USVT (assumed to be defined elsewhere)
+  P.tilde <- USVT(A)
+  P.tilde[P.tilde > (1 - 1e-5)] <- (1 - 1e-5)
+  P.tilde[P.tilde < 1e-5] <- 1e-5
+  
+  Theta.tilde <- logit(P.tilde)
+  alpha_0 <- solve(N * diag(rep(1, N)) + M, rowSums(Theta.tilde))
+  G <- Jmat %*% (Theta.tilde - outer(alpha_0, alpha_0, "+")) %*% Jmat
+  
+  eig <- eigs_sym(A = G, k = k)
+  # Set non-positive eigenvalues to zero
+  eig$values[eig$values <= 0] <- 0
+  
+  Z_0 <- t(t(eig$vectors[, 1:k]) * sqrt(eig$values[1:k]))
+  step.size.z <- step.size / norm(Z_0, "2")^2
+  step.size.alpha <- step.size / (2 * N)
+  
+  # Call the C++ function
+  res <- LSM_PGD_Cpp(A, Z_0, alpha_0, step.size.z, step.size.alpha, niter, trace = (trace > 0))
+  return(res)
+}
 
 ###  example:
 # dt <- RDPG.Gen(n=600,K=2,directed=TRUE)
@@ -1740,3 +1729,59 @@ smooth.oracle <- function(Us,A){
   }
   return(P_hat)
 }
+
+
+## internal function
+transpose_index <- function(x, n) {
+  # Recover (i, j) from x
+  i <- ((x - 1) %% n) + 1
+  j <- ((x - 1) %/% n) + 1
+  
+  # Build the single index for A[j, i]
+  y <- j + (i - 1)*n
+  
+  return(y)
+}
+
+
+### Sampling random positions in a network, internal function
+sampling.ER <- function(n,rho){
+  m <- ceiling(1.2*n*rho)
+  geo.num <- rgeom(m,prob=rho) + 1
+  index <- cumsum(geo.num)
+  flag <- FALSE
+  max.index <- sum(geo.num)
+  if(max.index >= n){
+    flag <- TRUE
+  }
+  while(!flag){
+    m <- ceiling(0.1*n*rho)
+    geo.num <- rgeom(m,prob=rho) + 1
+    index <- c(index,cumsum(geo.num) + max.index)
+    max.index <- sum(geo.num) + max.index
+    if(max.index >= n){
+      flag <- TRUE
+    }
+    
+  }
+  return(index[index <= n])
+}
+
+
+
+
+#### Extract K-core of of a network: resulting in a network where all nodes have degree at least K.
+
+k.core <- function(A,K){
+  conv <- FALSE
+  while(!conv){
+    rm.index <- which(rowSums(A)<K)
+    A <- A[-rm.index,-rm.index]
+    if(sum(rowSums(A)<K)==0){
+      conv <- TRUE
+    }
+  }
+  return(list(A=A))
+}
+
+

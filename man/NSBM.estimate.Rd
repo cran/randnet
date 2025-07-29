@@ -26,7 +26,7 @@ the regularity lower bound of lambda value. By default, -Inf. That means, no con
 
 }
 \details{
-The method of moments is used for estimating the edge nomination SBM, so the strategy can be used for both unweighted and weighted networks. The details can be found in Li et. al. (2020).
+The method of moments is used for estimating the edge nomination SBM, so the strategy can be used for both unweighted and weighted networks. The details can be found in Li et. al. (2023).
 }
 \value{
 a list of
@@ -37,11 +37,11 @@ a list of
 \item{g }{community labels}
 }
 \references{
-  T. Li, E. Levina, and J. Zhu. Community models for networks observed through edge nominations. arXiv preprint arXiv:2008.03652 (2020).
+  Li, T., Levina, E. and Zhu, J., 2023. Community models for networks observed through edge nominations. Journal of Machine Learning Research, 24(282), pp.1-36.
 }
 \author{
   Tianxi Li, Elizaveta Levina, Ji Zhu\cr
-  Maintainer: Tianxi Li  \email{tianxili@virginia.edu}
+  Maintainer: Tianxi Li  \email{tianxili@umn.edu}
 }
 
 \seealso{

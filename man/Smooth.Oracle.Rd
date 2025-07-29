@@ -29,7 +29,7 @@ The estimated probability matrix.
 }
 \author{
   Tianxi Li, Elizaveta Levina, Ji Zhu, Can M. Le\cr
-  Maintainer: Tianxi Li  \email{tianxili@virginia.edu}
+  Maintainer: Tianxi Li  \email{tianxili@umn.edu}
 }
 
 
